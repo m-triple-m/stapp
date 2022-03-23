@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme, ThemeProvider } from "@mui/material";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Crud from "./components/crud";
+import Header from "./components/header";
+import Main from "./components/main";
+import Login from "./components/main/login";
+import Signup from "./components/main/signup";
+import Manage from "./components/manage";
+import UsingScene from "./components/usingScene";
 
 function App() {
+  const theme1 = createTheme({
+    palette: {
+      text: {
+        primary: "#555555",
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme1}>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route element={<Crud />} path="/crud" />
+          <Route element={<Manage />} path="/manage" />
+          <Route element={<UsingScene />} path="/scene" />
+          <Route element={<Main />} path="main">
+            <Route element={<Signup />} path="signup" />
+            <Route element={<Login />} path="login" />
+          </Route>
+
+          <Route path="/" element={<Navigate replace to="/manage" />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
