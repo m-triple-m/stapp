@@ -21,7 +21,9 @@
     "react-router-dom": "^6.1.1",
     "react-scenejs": "^1.1.0",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "react-transition-group": "^4.4.2",
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

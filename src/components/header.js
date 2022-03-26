@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -47,6 +47,28 @@ const Header = () => {
               <NavLink to="/main/signup" className="nav-link px-2 text-white">
                 Signup
               </NavLink>
+            </li>
+            <li class="nav-item dropdown">
+              <Link
+                className="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                to=""
+              >
+                Admin
+              </Link>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/admin/dashboard/manageuser"
+                  >
+                    Manage Users
+                  </NavLink>
+                </li>
+              </ul>
             </li>
           </ul>
 
