@@ -18,7 +18,7 @@ function App() {
   const theme1 = createTheme({
     palette: {
       text: {
-        primary: "#555555",
+        primary: "#4d0fe9",
       },
     },
   });
@@ -51,12 +51,16 @@ function App() {
           </Route>
 
           <Route element={<Admin />} path="admin">
-            <Route element={<AdminDashboard />} path="dashboard">
-              <Route element={<ManageUser />} path="manageuser" />
-            </Route>
+            <Route element={<AdminDashboard />} path="dashboard" />
+            <Route element={<ManageUser />} path="manageuser" />
+            <Route path="admin" element={<Navigate to="/admin/dashboard" />} />
           </Route>
 
           <Route path="/" element={<Navigate replace to="/manage" />} />
+          <Route
+            path="/login"
+            element={<Navigate replace to="/main/login" />}
+          />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

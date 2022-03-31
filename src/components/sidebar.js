@@ -9,6 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import {
+  Avatar,
   Box,
   CssBaseline,
   Divider,
@@ -16,11 +17,15 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import app_config from "../config";
 
 const drawerWidth = 240;
 
@@ -89,9 +94,14 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ children, sidebarOptions, title }) {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const url = app_config.api_url;
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -105,7 +115,7 @@ export default function Sidebar({ children }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar sx={{ mr: 2 }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -118,9 +128,15 @@ export default function Sidebar({ children }) {
           >
             <Menu />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            {title}
           </Typography>
+          <IconButton
+            sx={{ p: 0 }}
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+          >
+            <Avatar alt="Remy Sharp" src={url + "/images/ada.jpg"} />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -131,9 +147,10 @@ export default function Sidebar({ children }) {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          {sidebarOptions.map(({ name, icon, link }) => (
             <ListItemButton
-              key={text}
+              onClick={(e) => navigate(link)}
+              key={name}
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
@@ -147,33 +164,9 @@ export default function Sidebar({ children }) {
                   justifyContent: "center",
                 }}
               >
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
+                {icon}
               </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItemButton
-              key={text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={name} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           ))}
         </List>

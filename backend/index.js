@@ -30,6 +30,8 @@ app.get("/home", (req, res) => {
   console.log("request at home");
 });
 
+app.use(express.static("./static"));
+
 app.listen(port, () => {
   console.log("server started");
 });
