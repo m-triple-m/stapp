@@ -61,6 +61,8 @@ function App() {
             path="/login"
             element={<Navigate replace to="/main/login" />}
           />
+
+          <Route />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
