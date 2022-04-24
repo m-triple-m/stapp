@@ -1,10 +1,5 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  Menu,
-  Mail,
-  Inbox,
-} from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, Inbox } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -17,6 +12,7 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  Menu,
   MenuItem,
   Toolbar,
   Tooltip,
@@ -99,7 +95,8 @@ export default function Sidebar({ children, sidebarOptions, title }) {
   const [open, setOpen] = useState(true);
   const url = app_config.api_url;
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [userMenuPos, setUserMenuPos] = useState(null);
+  const userMenuOpen = Boolean(userMenuPos);
 
   const navigate = useNavigate();
 
@@ -126,17 +123,39 @@ export default function Sidebar({ children, sidebarOptions, title }) {
               ...(open && { display: "none" }),
             }}
           >
-            <Menu />
+            <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          <IconButton
-            sx={{ p: 0 }}
-            onClick={(e) => setAnchorEl(e.currentTarget)}
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton
+              onClick={(e) => setUserMenuPos(e.currentTarget)}
+              sx={{ p: 0 }}
+            >
+              <Avatar alt="Remy Sharp" src={url + "/images/ada.jpg"} />
+            </IconButton>
+          </Box>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={userMenuPos}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={userMenuOpen}
+            onClose={(e) => setUserMenuPos(null)}
           >
-            <Avatar alt="Remy Sharp" src={url + "/images/ada.jpg"} />
-          </IconButton>
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

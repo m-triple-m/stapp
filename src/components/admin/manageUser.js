@@ -8,6 +8,8 @@ import {
   CardContent,
   Container,
   Fab,
+  Menu,
+  MenuItem,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -18,6 +20,9 @@ const ManageUser = () => {
   const url = app_config.api_url;
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [menuPos, setMenuPos] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const fetchData = () => {
     fetch(url + "/user/getall")
@@ -55,25 +60,66 @@ const ManageUser = () => {
     );
   };
 
+  const updateUser = (id, data) => {
+    fetch(url + "/user/update/" + id, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      fetchData();
+      console.log(res.status);
+    });
+  };
+
   const displayData = () => {
     if (!loading) {
-      return userList.map((obj, index) => (
-        <Accordion key={obj._id}>
-          <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-            <Typography fontWeight={600}>{obj.username}</Typography>
-            {new Date(obj.created).toLocaleDateString()}
-          </AccordionSummary>
-          <AccordionDetails>
-            <Fab
-              onClick={(e) => deleteData(obj._id)}
-              variant="extended"
-              sx={{ background: "red", color: "white" }}
-            >
-              <Delete /> Delete
-            </Fab>
-          </AccordionDetails>
-        </Accordion>
-      ));
+      return userList.map(
+        ({ created, email, isAdmin, password, username, _id }, index) => (
+          <Accordion key={_id}>
+            <AccordionSummary expandIcon={<ExpandMoreSharp />}>
+              <Typography fontWeight={600}>{username}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <h5>Username : {username}</h5>
+              <h5>Email : {email}</h5>
+              <h5>Password : {password}</h5>
+              <h5>isAdmin : {isAdmin ? "yes" : "no"}</h5>
+              <h5>Created At : {new Date(created).toLocaleDateString()}</h5>
+
+              <Menu
+                anchorEl={menuPos}
+                open={Boolean(menuPos)}
+                onClose={(e) => setMenuPos(null)}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                <MenuItem>Profile</MenuItem>
+                <MenuItem
+                  onClick={(e) => updateUser(_id, { isAdmin: !isAdmin })}
+                >
+                  {!isAdmin ? "Make Admin" : "Make User"}
+                </MenuItem>
+                <MenuItem onClick={(e) => deleteData(_id)}>Delete</MenuItem>
+              </Menu>
+              <Fab
+                onClick={(e) => setMenuPos(e.currentTarget)}
+                variant="extended"
+                sx={{ background: "red", color: "white" }}
+              >
+                <Delete /> Delete
+              </Fab>
+            </AccordionDetails>
+          </Accordion>
+        )
+      );
     }
   };
 

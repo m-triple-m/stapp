@@ -52,13 +52,13 @@ router.post("/check-login", (req, res) => {
   Model.findOne({ email: formdata.email })
     .then((data) => {
       if (data) {
-        if (data.password == formdata.password) {
-          res.status(200).json({ message: "login success" });
+        if (data.password === formdata.password) {
+          res.status(200).json(data);
         } else {
-          res.status(300).json({ message: "password incorrect" });
+          res.status(400).json({ message: "password incorrect" });
         }
       } else {
-        res.status(300).json({ message: "email not found" });
+        res.status(400).json({ message: "email not found" });
       }
     })
     .catch((err) => {

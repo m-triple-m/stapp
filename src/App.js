@@ -4,6 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import Admin from "./components/admin";
 import AdminDashboard from "./components/admin/dashboard";
 import ManageUser from "./components/admin/manageUser";
+import Profile from "./components/profile";
 import Crud from "./components/crud";
 import Header from "./components/header";
 import Main from "./components/main";
@@ -17,9 +18,9 @@ import UsingScene from "./components/usingScene";
 function App() {
   const theme1 = createTheme({
     palette: {
-      text: {
-        primary: "#4d0fe9",
-      },
+      // text: {
+      //   primary: "#4d0fe9",
+      // },
     },
   });
 
@@ -48,19 +49,26 @@ function App() {
 
           <Route element={<User />} path="user">
             <Route element={<AddBlog />} path="addblog" />
+            <Route element={<Profile />} path="profile" />
           </Route>
 
           <Route element={<Admin />} path="admin">
+            <Route element={<Profile />} path="profile" />
             <Route element={<AdminDashboard />} path="dashboard" />
             <Route element={<ManageUser />} path="manageuser" />
             <Route path="admin" element={<Navigate to="/admin/dashboard" />} />
           </Route>
 
-          <Route path="/" element={<Navigate replace to="/manage" />} />
+          <Route path="/" element={<Navigate replace to="/main/login" />} />
           <Route
-            path="/login"
-            element={<Navigate replace to="/main/login" />}
+            path="user"
+            element={<Navigate replace to="/user/profile" />}
           />
+          <Route
+            path="admin"
+            element={<Navigate replace to="/admin/profile" />}
+          />
+          <Route path="login" element={<Navigate replace to="/main/login" />} />
 
           <Route />
         </Routes>

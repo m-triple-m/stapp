@@ -16,9 +16,13 @@ import { Formik } from "formik";
 import { useState } from "react";
 import app_config from "../../config";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [passVisible, setPassVisible] = useState(false);
+  const [avatar, setAvatar] = useState("");
+  const navigate = useNavigate();
 
   const formdata = {
     name: "",
@@ -41,11 +45,17 @@ const Signup = () => {
       },
     };
 
-    fetch(url + "/user/add", reqOptions)
-      .then((res) => res.json())
-      .catch((data) => {
-        console.log(data);
+    fetch(url + "/user/add", reqOptions).then((res) => {
+      console.log(res.status);
+      Swal.fire({
+        icon: "success",
+        title: "Success!!",
+        text: "Register Successfull",
+      }).then(() => {
+        navigate("/main/login");
       });
+      res.json();
+    });
   };
 
   const layout = {
@@ -131,6 +141,18 @@ const Signup = () => {
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Password Confirmation is Required"),
   });
+
+  const uploadAvatar = (e) => {
+    const file = e.target.files[0];
+    fetch(url + "/util/uploadfile", {
+      method: "POST",
+      body: new FormData("myfile", file),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
 
   return (
     <Paper style={layout}>

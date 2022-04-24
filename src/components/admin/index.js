@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { AccountCircle } from "@mui/icons-material";
+import { AccountBox, AccountCircle } from "@mui/icons-material";
 import Sidebar from "../sidebar";
 
 const Admin = () => {
@@ -8,6 +8,11 @@ const Admin = () => {
       name: "Profile",
       icon: <AccountCircle />,
       link: "/admin/profile",
+    },
+    {
+      name: "Manage Users",
+      icon: <AccountBox />,
+      link: "/admin/manageuser",
     },
   ];
 

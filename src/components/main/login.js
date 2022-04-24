@@ -9,7 +9,7 @@ import {
   Typography,
   Checkbox,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import app_config from "../../config";
 import Brand from "../brand";
 import { Formik } from "formik";
@@ -37,6 +37,7 @@ const Login = () => {
   });
 
   const url = app_config.api_url;
+  const navigate = useNavigate();
 
   const loginForm = {
     email: "",
@@ -57,9 +58,22 @@ const Login = () => {
           Swal.fire({
             icon: "success",
             title: "Loggedin Successfully",
+          }).then(() => {
+            res.json().then((data) => {
+              if (data.admin) {
+                navigate("/admin");
+              } else {
+                navigate("/user");
+              }
+            });
+          });
+        } else if (res.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "OOOps!!",
+            text: "Login failed",
           });
         }
-        return res.json();
       })
       .then((data) => console.log(data));
   };
@@ -139,6 +153,7 @@ const Login = () => {
                 textDecoration: "none",
                 marginTop: "10rem",
               }}
+              onClick={(e) => navigate("/main/signup")}
             >
               Create your Account
             </Typography>
